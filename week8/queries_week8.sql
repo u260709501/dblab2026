@@ -7,7 +7,7 @@ where votes > 500000 and year < 2000 and
 movie_id in
 (select movie_id from movie_directors join directors
 on movie_directors.director_id = directors.director_id
-where director_name like "Quentin");
+where director_name = "Quentin Tarantino");
 
 # 2. Show the films that Tom Hanks has act and have won more than 3 Oscars.
 select m.title, m.oscars, s.star_name
@@ -30,7 +30,7 @@ and m.duration between 100 and 200;
 
 select AVG(m.budget) as avg_budget
 from movies m
-join movies.directors md on m.movie_id = md.movie_id
+join movie_directors md on m.movie_id = md.movie_id
 join directors d on d.director_id = md.director_id
 where d.director_name = "Peter Jackson";
 
@@ -38,15 +38,15 @@ where d.director_name = "Peter Jackson";
 
 select m.title, m.budget
 from movies m
-join movie_directors md on movie_id = md.movie_id
-join directors d on d.director_id = md.movie_id
-where d.director_name = "Francis Ford Capğpola"
-order by m.budget
+join movie_directors md on m.movie_id = md.movie_id
+join directors d on d.director_id = md.director_id
+where d.director_name = "Francis Ford Coppola"
+order by m.budget desc
 limit 1;
 
 # 6.Show the film that has the most vote and has been produced in USA.
 
-select m.title, m.movies
+select m.title, m.votes
 from movies m
 join producer_countries pc on m.movie_id = pc.movie_id
 join countries c on pc.country_id = c.country_id
@@ -57,7 +57,7 @@ limit 1;
 # 7. List all stars who have acted in more than 1 films
 
 select s.star_name, count(ms.movie_id) as film_count
-from star s 
+from stars s 
 join movie_stars ms on s.star_id = ms.star_id
-group by s.star_name
+group by s.star_id, s.star_name
 having film_count > 1;
